@@ -4,7 +4,7 @@
 
 ## General problem
 
-Most classical registration software cast the problem as optimising (let's say minimizing) a functional of the form
+Most classical registration software cast the problem as optimising (let's say minimising) a functional of the form
 
 $$
 \mathcal{L} = \underbrace{\mathcal{S}\left(\mathbf{f}, g\circ\boldsymbol\phi ~\mid~ \boldsymbol\theta\right)}\_{\text{similarity}} ~~~+ \underbrace{\mathcal{R}(\boldsymbol\theta)}\_{\text{regularity}} ~.
@@ -17,9 +17,9 @@ $$
 > - $g \in \mathcal{C}\left(\mathbb{R}^3 \rightarrow \mathbb{R}\right)$ is the moving image, defined as a continuous function of space. Think B-spline encoding.
 > - $\boldsymbol\phi \in \mathbb{R}^{N \times 3}$ is the transformation field evaluated at the fixed image voxels.
 >   - More formally, I could have defined $\varphi \in \mathcal{C}\left(\mathbb{R}^3 \rightarrow \mathbb{R}^3\right)$, the continuous spatial transformation, 
->     and $\boldsymbol\phi = \left\\{ \varphi\left( \mathbf{x}\_{n} \right) \right\\}_{1 \leqslant n \leqslant N}$ the discretized transfomation.
+>     and $\boldsymbol\phi = \left\\{ \varphi\left( \mathbf{x}\_{n} \right) \right\\}_{1 \leqslant n \leqslant N}$ the discretised transfomation.
 >   - Abusing notations, we have $\left(g\circ\boldsymbol\phi\right) \in \mathbb{R}^N$.
-> - $\boldsymbol\theta \in \mathbb{R}^K$ is the parameterisation of $\boldsymbol\phi$ &mdash; that's what we optimize.
+> - $\boldsymbol\theta \in \mathbb{R}^K$ is the parameterisation of $\boldsymbol\phi$ &mdash; that's what we optimise.
 
 
 > [!TIP]
@@ -82,7 +82,7 @@ where $\mathbf{P}\_{\boldsymbol\theta}$ is known as the preconditioner. In Newto
 
 Since the regulariser is quadratic, all preconditioners will have the shape $\mathbf{P} = \left(\mathbf{H}^{\text{approx}} + \mathbf{R}\right)$, where $\mathbf{H}^{\text{approx}}$ is some alternative to the true Hessian of the similarity term. In this section, we will focus on variants of $\mathbf{H}^{\text{approx}}$.
 
-[Gauss-Newton](https://en.wikipedia.org/wiki/Gauss%E2%80%93Newton_algorithm) is generally presented in the context of nonlinear least-squares optimization. Keeping it general, let's assume that
+[Gauss-Newton](https://en.wikipedia.org/wiki/Gauss%E2%80%93Newton_algorithm) is generally presented in the context of nonlinear least-squares optimisation. Keeping it general, let's assume that
 
 $$
 \mathcal{S}(\boldsymbol\theta) = \frac{1}{2} \mathcal{F}(\boldsymbol\theta)^{\mathbf{T}} \mathbf{W} \mathcal{F}(\boldsymbol\theta)
@@ -104,7 +104,7 @@ Discarding the second term of the Hessian derives from the use of [Fisher's scor
 > Fisher's scoring can be applied in more general contexts than nonlinear least-squares,
 > and is a common way to obtain approximate Hessians to use as preconditioners.
 > 
-> For example, JA uses it when optimizing bias fields in unified segmentation. As you probably know, he does not
+> For example, JA uses it when optimising bias fields in unified segmentation. As you probably know, he does not
 > log transform the data, and enforces bias field positivity by wrapping it in an exponential. The Gaussian log-likelihood in a cluster is
 >
 > $$
@@ -128,13 +128,13 @@ One problem with Fisher's scoring is that the approximate Hessian can be _less p
 > Given two PSD matrices $\mathbf{X}$ and $\mathbf{Y}$, we say that $\mathbf{X}$ _majorises_ $\mathbf{Y}$ (_i.e._, is more positive-definite), noted $\mathbf{X} \succeq \mathbf{Y}$, if $\mathbf{X} - \mathbf{Y}$ is positive semi-definite (also written $\mathbf{X} - \mathbf{Y} \succeq \mathbf{0}$).
 
 > [!IMPORTANT]
-> In optimization, Loewner's order matters because, for a convex function $\mathcal{L}$, using a preconditioner whose inverse is more positive definite than all Hessians of $\mathcal{L}$ ensures that preconditioned gradient descent converges. If you're familiar with maximization-minimization framework, it's quite easy to see that with such a preconditioner the quadratic
+> In optimisation, Loewner's order matters because, for a convex function $\mathcal{L}$, using a preconditioner whose inverse is more positive definite than all Hessians of $\mathcal{L}$ ensures that preconditioned gradient descent converges. If you're familiar with minimisation-maximisation framework, it's quite easy to see that with such a preconditioner the quadratic
 > 
 > $$
 > \mathcal{Q}(\boldsymbol\theta) = \mathcal{L}(\boldsymbol\theta_0) + \boldsymbol\nabla\mathcal{L}(\boldsymbol\theta_0) \left(\boldsymbol\theta - \boldsymbol\theta_0\right) + \frac{1}{2}\left(\boldsymbol\theta - \boldsymbol\theta_0\right)^{\mathrm{T}}\mathbf{P}^{-1}\left(\boldsymbol\theta - \boldsymbol\theta_0\right) ~,
 > $$
 >
-> which the preconditioned gradient descent step happens to minimize, is above $\mathcal{L}(\boldsymbol\theta)$ everywhere.
+> which the preconditioned gradient descent step happens to minimise, is above $\mathcal{L}(\boldsymbol\theta)$ everywhere.
 
 > [!NOTE]
 > In [Model-based multiparameter mapping](https://arxiv.org/pdf/2102.01604.pdf) (which is not very well written, sorry...) we show that an approximate Hessian of the form
@@ -143,7 +143,7 @@ One problem with Fisher's scoring is that the approximate Hessian can be _less p
 > \mathbf{H}^{\text{aprox}} = \boldsymbol\nabla\mathcal{F}(\boldsymbol\theta)^{\mathrm{T}} \mathbf{W} \boldsymbol\nabla\mathcal{F}(\boldsymbol\theta) + \text{diag}\left(\left|\sum\_{m}\mathcal{H}\mathcal{F}_m(\boldsymbol\theta) \cdot \mathbf{w}\_m^{\text{T}} \mathcal{F}(\boldsymbol\theta)\right| \mathbf{1}\right)~,
 > $$
 >
-> which is a majorizer of the true Hessian, works better than the Gauss-Newton preconditioner.
+> which is a majoriser of the true Hessian, works better than the Gauss-Newton preconditioner.
 
 [Levenberg-Marquardt](https://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm) simply consists of choosing a preconditioner that interpolates between gradient descent and Gauss-Newton. Their preconditioners are:
 - $\mathbf{H}^{\text{Levenberg}} = \mathbf{H}^{\text{Fisher}} + \lambda \mathbf{I}$
